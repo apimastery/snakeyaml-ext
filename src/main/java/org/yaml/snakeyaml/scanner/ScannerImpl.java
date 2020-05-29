@@ -1835,42 +1835,37 @@ public final class ScannerImpl implements Scanner {
 
         // Scan until 3 consecutive double quotes where
         // the first is not preceded by a \ to escape it
-        while (true) {
-            int c = 0;
-            int length = 0;
+        int length = 0;
+        while (true)
+        {
+           int c = reader.peek(length);
 
-            while (true) {
-                c = reader.peek(length);
+           // end-of-stream?
+           if (c == '\0')
+           {
+              // This is unexpected so it is an error
+              final String quoteChar = String.valueOf(Character.toChars(quote));
+              throw new ScannerException("scanning for " + quoteChar + quoteChar + quoteChar,
+                    startMark, "unexpected end of stream", reader.getMark());
+           }
 
-                // end-of-stream?
-                if (c == '\0') {
-                    // This is unexpected so it is an error
-                    final String quoteChar = String.valueOf(Character.toChars(quote));
-                    throw new ScannerException("scanning for " + quoteChar + quoteChar + quoteChar,
-                            startMark, "unexpected end of stream", reader.getMark());
-                }
-
-                if (c == quote) {
-                    if ((length == 0 || (length > 0 && reader.peek(length - 1) != '\\'))
-                            && reader.peek(length + 1) == quote
-                            && reader.peek(length + 2) == quote) {
-                        chunks.append(reader.prefixForward(length));
-                        reader.forward(3); // for the 3 consecutive quotes
-                        break;
-                    }
-                }
-                length++;
-            }
-
-            // See `scanFlowScalarNonSpaces` for processing escape sequences.
-            // For now, everything in between the triple quotes is taken
-            // verbatim
-            // and without processing escape sequences. For such, use chomping
-            // indicator and proper indentation
-
-            chunks.toString();
-            break;
+           if (c == quote)
+           {
+              if ((length == 0 || (length > 0 && reader.peek(length - 1) != '\\'))
+                    && reader.peek(length + 1) == quote && reader.peek(length + 2) == quote)
+              {
+                 chunks.append(reader.prefixForward(length));
+                 reader.forward(3); // for the 3 consecutive quotes
+                 break;
+              }
+           }
+           length++;
         }
+
+        // See `scanFlowScalarNonSpaces` for processing escape sequences.
+        // For now, everything in between the triple quotes is taken
+        // verbatim and without processing escape sequences. For such,
+        // use chomping indicator and proper indentation
 
         final Mark endMark = reader.getMark();
         final String text = chunks.toString();
