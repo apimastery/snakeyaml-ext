@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yaml</groupId>
     <artifactId>snakeyaml</artifactId>
-    <version>1.26</version>
+    <version>1.26-ext1</version>
     <packaging>bundle</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,7 +21,7 @@
         <jdk9-illegal-access-level>deny</jdk9-illegal-access-level>
     </properties>
     <name>SnakeYAML</name>
-    <description>YAML 1.1 parser and emitter for Java</description>
+    <description>YAML 1.1 parser and emitter for Java, extended</description>
     <inceptionYear>2008</inceptionYear>
     <url>http://www.snakeyaml.org</url>
     <issueManagement>
@@ -66,6 +66,10 @@
             <id>Jordan</id>
             <name>Jordan Angold</name>
             <email>jordanangold@gmail.com</email>
+        </developer>
+        <developer>
+            <id>apimastery</id>
+            <name>apimastery</name>
         </developer>
     </developers>
     <dependencies>
@@ -118,6 +122,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <!--
     <distributionManagement>
         <repository>
             <id>sonatype-nexus-staging</id>
@@ -131,6 +136,7 @@
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
+    -->
     <build>
         <testResources>
             <testResource>
