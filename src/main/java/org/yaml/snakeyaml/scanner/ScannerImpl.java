@@ -1916,45 +1916,39 @@ public final class ScannerImpl implements Scanner {
        final Mark startMark = reader.getMark();
 
        // Scan until 1 backtick character not preceded by a \ to escape it
+       int length = 0;
        while (true)
        {
-          int c = 0;
-          int length = 0;
+          int c = reader.peek(length);
 
-          while (true)
+          // end-of-stream?
+          if (c == '\0')
           {
-             c = reader.peek(length);
-
-             // end-of-stream?
-             if (c == '\0')
-             {
-                // This is unexpected so it is an error
-                final String quoteChar = String.valueOf(Character.toChars(quote));
-                throw new ScannerException("scanning for " + quoteChar, startMark,
-                      "unexpected end of stream", reader.getMark());
-             }
-
-             if (c == quote)
-             {
-                if ((length == 0) || (length > 0 && reader.peek(length - 1) != '\\'))
-                {
-                   chunks.append(reader.prefixForward(length));
-                   reader.forward(1); // for the 1 backtick character
-                   break;
-                }
-                else if (length > 0 && reader.peek(length - 1) == '\\')
-                {
-                   chunks.append(reader.prefixForward(length - 1));
-                   chunks.append('`');
-                   reader.forward(2); // for the escape \ and 1 backtick
-                   length = 0;
-                   continue;
-                }
-             }
-             length++;
+             // This is unexpected so it is an error
+             final String quoteChar = String.valueOf(Character.toChars(quote));
+             throw new ScannerException("scanning for " + quoteChar, startMark,
+                   "unexpected end of stream", reader.getMark());
           }
 
-          break;
+          if (c == quote)
+          {
+             if ((length == 0) || (length > 0 && reader.peek(length - 1) != '\\'))
+             {
+                chunks.append(reader.prefixForward(length));
+                reader.forward(1); // for the 1 backtick character
+                break;
+             }
+             else if (length > 0 && reader.peek(length - 1) == '\\')
+             {
+                chunks.append(reader.prefixForward(length - 1));
+                chunks.append('`');
+                reader.forward(2); // for the escape \ and 1 backtick
+
+                length = 0;
+                continue;
+             }
+          }
+          length++;
        }
 
        final Mark endMark = reader.getMark();
