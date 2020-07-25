@@ -3,21 +3,32 @@
 
 A problem we often times observe with users writing API simlets with the DSL is the YAML-imposed requirement for multi-line text to be properly indented after a [chomping indicator](https://yaml.org/spec/1.1/#chomping/).
 
-Some programming languages, like Python, have support for text surrounded in a pair of matching triple double quotes `"""`; end of lines inside the triple quotes do not need to be escaped and they are included in the text. So, we decided to introduce triple double quotes surrounded text to the API Simulator's DSL. For example:
+So, we decided to introduce backtick `` ` `` surrounded multi-line text to the API Simulator's DSL - end of lines inside the backtick characters do not need to be escaped and they are included in the text. For example:
 
 ```
 response:
   from: stub
   headers:
     - "Content-Type: application/json"
-  body: """
+  body: `
 {
  "status": "OK"
 }
-"""
+`
 ```
 
+More details:
+
+* Any whitespace characters at the beginning of the lines surrounded by a pair of backtick characters will be part of the text. 
+* The text surrounded by backtick characters must start on a new line right after the opening backtick character.
+* The closing backtick character can be on a new line or on the same line where the text ends depending on whether you want the text to end with a line break on not.
+* A backtick character inside the text can be escaped by a `\` like in `` \` `` .
+
 That is not compliant with the YAML standard. Therefore, this repo was born to "extend" SnakeYAML with support for text surrounded with triple double quotes that doesn't have to be indented; the text between the quotes is taken verbatim.
+
+2020-07-25 Update
+----
+There inital implementation used triple double quotes which now were replaced by the backtick character. The support for triple double quotes will be removed in the future.
 
 The starting codebase is a _copy_ (not a fork or mirror) of snakeyaml-1.26.
 
