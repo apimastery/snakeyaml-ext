@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+export v_image=$1
+echo "Using image "$v_image
+shift
+
+podman run --rm -it                \
+       --userns=keep-id            \
+       -u=$(id -u):$(id -g)        \
+       -v $(pwd):/work             \
+       -v $(cd ~ && pwd):/my-home  \
+       -e "HOME=/my-home"          \
+       -w /work                    \
+       $v_image                    \
+       /work/mvnw --show-version -Dmaven.repo.local=/my-home/.m2/repository clean test install ${@} > build.log 2>&1
+

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yaml</groupId>
     <artifactId>snakeyaml</artifactId>
-    <version>2.4</version>
+    <version>2.4-ext</version>
     <packaging>bundle</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,6 +58,10 @@
             <id>maslovalex</id>
             <name>Alexander Maslov</name>
             <email>alexander.maslov@gmail.com</email>
+        </developer>
+        <developer>
+            <id>apimastery</id>
+            <name>apimastery</name>
         </developer>
     </developers>
     <dependencies>

@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+./build-in-podman docker.io/eclipse-temurin:11-jdk $@

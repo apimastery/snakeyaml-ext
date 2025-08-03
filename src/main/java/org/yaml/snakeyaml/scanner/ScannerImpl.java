@@ -441,6 +441,12 @@ public final class ScannerImpl implements Scanner {
         // Is it a double quoted scalar?
         fetchDouble();
         return;
+      // apimastery
+      case '`':
+        // Is it a backtick quoted scalar?
+        fetchFlowScalar('`');
+        return;
+      // apimastery
     }
     // It must be a plain scalar then.
     if (checkPlain()) {
@@ -1870,6 +1876,146 @@ public final class ScannerImpl implements Scanner {
     return new Object[] {chunks.toString(), endMark};
   }
 
+  // apimastery
+  private Token scanTripleQuotedLiteralScalar() // int quote)
+  {
+    final int quote = '"';
+
+    // Scan through any number of whitespace (space, tab) characters
+    int whitespaceLength = 0;
+    while (" \t".indexOf(reader.peek(whitespaceLength)) != -1) {
+      whitespaceLength++;
+    }
+    if (whitespaceLength > 0) {
+      // Skip whitespaces without returning them as
+      // a String like `prefixForward(length)` does
+      reader.forward(whitespaceLength);
+    }
+
+    String lineBreak = scanLineBreak();
+    final int lineBreakLength = lineBreak.length();
+    if (lineBreakLength == 0) {
+      final int c = reader.peek();
+      throw new ScannerException("scanning for end of line", reader.getMark(),
+          "expected end of line but got "
+              + (c != '\0' ? String.valueOf(Character.toChars(c)) + " (" + c + ")"
+                  : "end of stream"),
+          reader.getMark());
+    }
+    // Do NOT call `reader.forward(lineBreakLength)`
+    // because `scanLineBreak()` does it
+
+    final StringBuilder chunks = new StringBuilder();
+    final Mark startMark = reader.getMark();
+
+    // Scan until 3 consecutive double quotes where
+    // the first is not preceded by a \ to escape it
+    int length = 0;
+    while (true) {
+      int c = reader.peek(length);
+
+      // end-of-stream?
+      if (c == '\0') {
+        // This is unexpected so it is an error
+        final String quoteChar = String.valueOf(Character.toChars(quote));
+        throw new ScannerException("scanning for " + quoteChar + quoteChar + quoteChar, startMark,
+            "unexpected end of stream", reader.getMark());
+      }
+
+      if (c == quote) {
+        if ((length == 0 || (length > 0 && reader.peek(length - 1) != '\\'))
+            && reader.peek(length + 1) == quote && reader.peek(length + 2) == quote) {
+          chunks.append(reader.prefixForward(length));
+          reader.forward(3); // for the 3 consecutive quotes
+          break;
+        }
+      }
+      length++;
+    }
+
+    // See `scanFlowScalarNonSpaces` for processing escape sequences.
+    // For now, everything in between the triple quotes is taken
+    // verbatim and without processing escape sequences. For such,
+    // use chomping indicator and proper indentation
+
+    final Mark endMark = reader.getMark();
+    final String text = chunks.toString();
+    return new ScalarToken(text, /* plain */ false, startMark, endMark,
+        // Treat it as a ScalarStyle.LITERAL so dumping it will use
+        // proper chomping
+        DumperOptions.ScalarStyle.LITERAL);
+  }
+
+  private Token scanBacktickQuotedLiteralScalar() // int quote)
+  {
+    final int quote = '`';
+
+    // Scan through any number of whitespace (space, tab) characters
+    int whitespaceLength = 0;
+    while (" \t".indexOf(reader.peek(whitespaceLength)) != -1) {
+      whitespaceLength++;
+    }
+    if (whitespaceLength > 0) {
+      // Skip whitespaces without returning them as
+      // a String like `prefixForward(length)` does
+      reader.forward(whitespaceLength);
+    }
+
+    String lineBreak = scanLineBreak();
+    final int lineBreakLength = lineBreak.length();
+    if (lineBreakLength == 0) {
+      final int c = reader.peek();
+      throw new ScannerException("scanning for end of line", reader.getMark(),
+          "expected end of line but got "
+              + (c != '\0' ? String.valueOf(Character.toChars(c)) + " (" + c + ")"
+                  : "end of stream"),
+          reader.getMark());
+    }
+    // Do NOT call `reader.forward(lineBreakLength)`
+    // because `scanLineBreak()` does it
+
+    final StringBuilder chunks = new StringBuilder();
+    final Mark startMark = reader.getMark();
+
+    // Scan until 1 backtick character not preceded by a \ to escape it
+    int length = 0;
+    while (true) {
+      int c = reader.peek(length);
+
+      // end-of-stream?
+      if (c == '\0') {
+        // This is unexpected so it is an error
+        final String quoteChar = String.valueOf(Character.toChars(quote));
+        throw new ScannerException("scanning for " + quoteChar, startMark,
+            "unexpected end of stream", reader.getMark());
+      }
+
+      if (c == quote) {
+        if ((length == 0) || (length > 0 && reader.peek(length - 1) != '\\')) {
+          chunks.append(reader.prefixForward(length));
+          reader.forward(1); // for the 1 backtick character
+          break;
+        } else if (length > 0 && reader.peek(length - 1) == '\\') {
+          chunks.append(reader.prefixForward(length - 1));
+          chunks.append('`');
+          reader.forward(2); // for the escape \ and 1 backtick
+
+          length = 0;
+          continue;
+        }
+      }
+      length++;
+    }
+
+    final Mark endMark = reader.getMark();
+    final String text = chunks.toString();
+    return new ScalarToken(text, /* plain */ false, startMark, endMark,
+        // Treat it as a ScalarStyle.LITERAL so dumping it will use
+        // proper chomping
+        DumperOptions.ScalarStyle.LITERAL);
+  }
+  // apimastery
+
   /**
    * Scan a flow-style scalar. Flow scalars are presented in one of two forms; first, a flow scalar
    * may be a double-quoted string; second, a flow scalar may be a single-quoted string.
@@ -1886,6 +2032,27 @@ public final class ScannerImpl implements Scanner {
    *      </pre>
    */
   private Token scanFlowScalar(char style) {
+
+    // apimastery
+    if (style == '"' && reader.peek(0) == style && reader.peek(1) == style
+        && reader.peek(2) == style) {
+
+      // Move past the 3 consecutive double quotes
+      reader.forward(3);
+
+      final Token t = scanTripleQuotedLiteralScalar(); // style);
+      return t;
+    }
+
+    if (style == '`' && reader.peek(0) == style) {
+      // Move past the 1 backtick character
+      reader.forward(1);
+
+      final Token t = scanBacktickQuotedLiteralScalar(); // style);
+      return t;
+    }
+    // apimastery
+
     // The style will be either single- or double-quoted; we determine this
     // by the first character in the entry (supplied)
     final boolean doubleValue = style == '"';

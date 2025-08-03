@@ -78,3 +78,6 @@ nb-configuration.xml
 
 # ignore docker build files
 ?/
+
+*.log
+
