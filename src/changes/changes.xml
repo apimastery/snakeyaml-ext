@@ -5,6 +5,286 @@
         <title>YAML 1.1 parser and emitter</title>
     </properties>
     <body>
+        <release version="2.4" date="in GIT" description="Maintenance">
+            <action dev="maslovalex" type="fix" issue="1101">
+                Add option to log duplicate keys (thanks to Matteo Franci)
+            </action>
+            <action dev="asomov" type="add">
+                Add a test for issue 1100 to prove it is a duplicate of 1098
+            </action>
+            <action dev="asomov" type="update">
+                Add a test to prove that no space is needed after an alias.
+                It is different with SnakeYAML Engine where it is required.
+            </action>
+            <action dev="asomov" type="fix"  issue="1098">
+                Fix issue with a big YAML with emoji (thanks to Madalin Ilie)
+            </action>
+            <action dev="asomov" type="add"  issue="1097">
+                Refactor Scanner to improve performance (thanks to David Schlosnagle)
+            </action>
+            <action dev="asomov" type="add">
+                Use tests for java 8
+            </action>
+            <action dev="asomov" type="remove">
+                Remove external Base64Coder and use provided Base64 (thanks to MithunKhanna)
+            </action>
+            <action dev="asomov" type="update">
+                Switch to Java 8 and support JDK 21
+            </action>
+        </release>
+        <release version="2.3" date="2024-08-31" description="Maintenance">
+            <action dev="maslovalex" type="add">
+                Add possibility to create JMH benchmark (thanks to David Schlosnagle)
+            </action>
+            <action dev="maslovalex" type="fix" issue="1096">
+                Implement the merge tag in the Node graph (thanks to Floris Westerman)
+            </action>
+            <action dev="asomov" type="update" issue="1090">
+                Try to keep the anchor name when available (thanks to Gergely Czuczy)
+            </action>
+            <action dev="asomov" type="update" issue="1089">
+                Add test for issue 1089 (thanks to Gergely Czuczy)
+            </action>
+            <action dev="asomov" type="update" issue="1088">
+                Test when a field starts with single lower case letter (thanks to Evgeny Bogatyrev)
+            </action>
+            <action dev="asomov" type="update" issue="1084">
+                Dump as JSON (thanks to Mikael Ståldal)
+            </action>
+            <action dev="asomov" type="update">
+                Run SnakeYAML without java.desktop module (thanks to Jaroslav Tulach)
+            </action>
+            <action dev="asomov" type="fix" issue="1087">
+                Remove unused BUFFER_SIZE (thanks to Róbert Papp (TWiStErRob))
+            </action>
+            <action dev="maslovalex" type="fix" issue="1086">
+                Use DumberOptions.setDereferenceAliases to avoid dumping anchors (thanks to Mikael Ståldal)
+            </action>
+            <action dev="asomov" type="fix" issue="1080">
+                Added test for issue 1080 (thanks to Ralph)
+            </action>
+            <action dev="asomov" type="fix" issue="1079">
+                finalizeConstruction not actually used (thanks to Jakub Kaszycki)
+            </action>
+        </release>
+        <release version="2.2" date="2023-08-27" description="Maintenance">
+            <action dev="asomov" type="update">
+                Define default scalar style as PLAIN (for polyglot Maven)
+            </action>
+            <action dev="asomov" type="update">
+                Add missing 'exports org.yaml.snakeyaml.inspector' to module-info.java
+                (thanks to Marius Hanl)
+            </action>
+        </release>
+        <release version="2.1" date="2023-08-04" description="Maintenance">
+            <action dev="asomov" type="fix" issue="1075">
+                Heavy Allocation in Emitter.analyzeScalar(String) due to Regex Overhead
+                (thanks to Carter Kozak)
+            </action>
+            <action dev="asomov" type="fix" issue="1064">
+                Use identity in toString() for sequences to avoid OutOfMemoryError
+                (thanks to 郭逸帆)
+            </action>
+            <action dev="asomov" type="fix" issue="1061">
+                https://github.com/FasterXML/jackson-dataformats-text/issues/406
+                https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=56902
+                %YAML 1.9224775801
+                (thanks to Tatu Saloranta)
+            </action>
+            <action dev="asomov" type="fix" issue="1065">
+                Document size limit should be applied to single document not the whole input stream
+                (thanks to Petr Gladkikh)
+            </action>
+            <action dev="asomov" type="fix" issue="576">
+                Detect invalid Unicode code point (thanks to Tatu Saloranta)
+            </action>
+            <action dev="maslovalex" type="remove">
+                Remove Trusted*Inspector classes from main sources tree
+            </action>
+        </release>
+        <release version="2.0" date="2023-02-26" description="Maintenance">
+            <action dev="maslovalex" type="fix" issue="570">
+                Rollback to Java 7 target
+            </action>
+            <action dev="asomov" type="fix" issue="495">
+                Add module-info.java (thanks to Clayton Walker and Василий Кудрявцев)
+            </action>
+            <action dev="asomov" type="update">
+                Migrate to Java 8
+            </action>
+            <action dev="asomov" type="remove">
+                Remove many deprecated constructors
+            </action>
+            <action dev="asomov" type="remove">
+                Remove long deprecated methods in FlowStyle
+            </action>
+            <action dev="asomov" type="fix" issue="565">
+                Do not allow global tags by default (thanks to Jonathan Leitschuh)
+            </action>
+            <action dev="asomov" type="fix" issue="556">
+                Yaml.LoadAs() signature to support Class&lt;? super T&gt; type instead of Class&lt;T&gt; (thanks to Matt D.)
+            </action>
+            <action dev="asomov" type="update">
+                CustomClassLoaderConstructor takes LoaderOptions
+            </action>
+            <action dev="asomov" type="update">
+                Check input parameters for non-null values
+            </action>
+        </release>
+        <release version="1.33" date="2022-09-26" description="Maintenance">
+            <action dev="asomov" type="remove">
+                Remove deprecated unused methods
+            </action>
+            <action dev="asomov" type="update">
+                Fix Github actions (thanks to Lee Read)
+            </action>
+            <action dev="asomov" type="fix" issue="553">
+                LoaderOptions.setCodePointLimit() not honored by loadAll() (thanks to Robert Patrick)
+            </action>
+            <action dev="asomov" type="fix" issue="554">
+                Always quoting strings that look like numbers and start with 0 (thanks to Lee Read)
+            </action>
+        </release>
+        <release version="1.32" date="2022-09-12" description="Maintenance">
+            <action dev="asomov" type="fix" issue="543">
+                Add a test for issue 543 (thanks to Henry Lin)
+            </action>
+            <action dev="asomov" type="fix" issue="547">
+                Set the limit for incoming data to prevent a CVE report in NIST
+                By default it is 3 MB
+            </action>
+            <action dev="asomov" type="update">
+                Format the source with Google style.
+                Info: https://stackoverflow.com/questions/49712148/maven-plugin-for-auto-formatting-code-to-match-google-checkstyle
+                Format: https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml
+                Activation: ./mvnw clean install site -Preformat
+            </action>
+            <action dev="maslovalex" type="fix" issue="544">
+                Support unescaped unicode characters for double-quoted scalars (thanks to Florian Waltenberger)
+            </action>
+        </release>
+        <release version="1.31" date="2022-08-27" description="Maintenance">
+            <action dev="maslovalex" type="update">
+                JDK 8 is required for tests
+            </action>
+            <action dev="asomov" type="update" issue="539">
+                Fix false positive CVE-2020-13936 (thanks to Gaétan Collaud)
+            </action>
+            <action dev="asomov" type="fix" issue="537">
+                Improved RE for integers (thanks to Petr Pucil)
+            </action>
+            <action dev="asomov" type="fix" issue="530">
+                Add an opportunity to restrict data matched with Regular Expressions
+                to avoid possible attack when RE takes too many resources (detected by OSS-Fuzz)
+            </action>
+            <action dev="asomov" type="fix" issue="529">
+                Show proper error message for invalid !!float and !!int scalar (detected by OSS-Fuzz)
+            </action>
+            <action dev="asomov" type="fix" issue="525">
+                Restrict nested depth for collections to avoid DoS attacks (detected by OSS-Fuzz)
+            </action>
+            <action dev="asomov" type="add" issue="525">
+                Add test for stackoverflow
+            </action>
+            <action dev="maslovalex" type="fix" issue="522">
+                Deserializing key "on" fails with Exception
+            </action>
+            <action dev="asomov" type="update">
+                Merged PR #7: https://bitbucket.org/snakeyaml/snakeyaml/pull-requests/7 (2022-04-04)
+            </action>
+            <action dev="asomov" type="update">
+                Do not emit global TAGs by not keeping them in Parser
+                (breaks https://code.google.com/archive/p/snakeyaml/issues/149)
+            </action>
+            <action dev="asomov" type="add">
+                Add an example with Lombok and ENV variable substitution (2021-12-29)
+            </action>
+            <action dev="asomov" type="update">
+                Fix issues with comments
+            </action>
+            <action dev="asomov" type="update" issue="517">
+                Recognise issue with trailing TAB
+            </action>
+        </release>
+        <release version="1.30" date="2021-12-14" description="Maintenance">
+            <action dev="asomov" type="fix" issue="516">
+                Remove snakeyaml.org
+            </action>
+            <action dev="asomov" type="update">
+                Migrate to https://bitbucket.org/snakeyaml/snakeyaml (2021-10-23)
+            </action>
+            <action dev="asomov" type="update">
+                Fix issues with comments
+            </action>
+            <action dev="asomov" type="fix" issue="506">
+                Improve parsing a number starting with 0x (2021-06-28)
+                Take the Float pattern from ruamel: https://pypi.org/project/ruamel.yaml
+            </action>
+        </release>
+        <release version="1.29" date="2021-06-08" description="Maintenance">
+            <action dev="Wolf2323" type="fix">
+                Fix Events ordering and improve Node-Comment association (2021-05-13)
+            </action>
+            <action dev="asomov" type="fix">
+                Fix corner case for comments where blank lines after plain token  (2021-03-02)
+            </action>
+            <action dev="asomov" type="add">
+                Add a test for issue 500 (2021-03-14)
+            </action>
+            <action dev="asomov" type="remove">
+                Remove unused variable (2021-02-28)
+            </action>
+        </release>
+        <release version="1.28" date="2021-02-22" description="Maintenance">
+            <action dev="maslovalex" type="fix">
+                Fix tests to work on Windows (2021-02-19)
+            </action>
+            <action dev="asomov" type="add">
+                Add enumCaseSensitive property to LoaderOptions to control constructing enum with case sensitivity (2021-01-05)
+            </action>
+            <action dev="asomov" type="fix" issue="493">
+                ENV substitution default can contain special characters (2021-01-03)
+            </action>
+            <action dev="asomov" type="add">
+                Allow for read and write YAML with Comments (2020-11-01)
+            </action>
+            <action dev="asomov" type="fix" issue="485">
+                Alias names are too permissive compared to libyaml and future spec.
+                Follow https://github.com/yaml/yaml-spec/blob/master/rfc/RFC-0003.md (2020-10-06)
+            </action>
+        </release>
+        <release version="1.27" date="2020-08-31" description="Maintenance">
+            <action dev="asomov" type="fix" issue="481">
+                Serialize anchors that are not used by any alias (2020-08-14)
+            </action>
+            <action dev="asomov" type="fix" issue="416">
+                Add indentWithIndicator option to improve dumping sequences (2020-07-14)
+            </action>
+            <action dev="asomov" type="fix" issue="480">
+                Anchor should allow non ascii characters while dumping (2020-06-29)
+            </action>
+            <action dev="asomov" type="update" issue="remove">
+                Remove Spring related tests because they are outdated and upgrading to Spring 5
+                makes the tests fail under JDK 7 (2020-05-02)
+            </action>
+            <action dev="asomov" type="update" issue="476">
+                Make constructor of EnvScalarConstructor public (2020-04-24)
+            </action>
+            <action dev="asomov" type="fix" issue="474">
+                Parse the value of byte and short after a narrowing primitive conversion (2020-04-16)
+            </action>
+            <action dev="asomov" type="add">
+                Add test for different Line Break Characters in the error message (2020-03-09)
+            </action>
+            <action dev="asomov" type="update">
+                Fix yet another OWASP false positive. It complains that the Spring controller makes SnakeYAML insecure
+                even though SnakeYAML does not use Spring controller and does not depend on Spring (but the tests do).
+                Bump spring.version from 3.2.17.RELEASE to 5.2.4.RELEASE (2020-03-08)
+            </action>
+            <action dev="asomov" type="update">
+                Migrated to GIT (2020-02-29)
+            </action>
+        </release>
         <release version="1.26" date="2020-02-28" description="Maintenance">
             <action dev="asomov" type="fix" issue="377">
                 Allow configuration for preventing billion laughs attack (2020-02-24)
